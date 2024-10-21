@@ -7,7 +7,7 @@ function ToDoList() {
     const [taskDescription, setTaskDescription] = useState('');
     const [tasks, setTasks] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
-    const [editingIndex, setEditingIndex] = useState(null); // Track the index of the task being edited
+    const [editingIndex, setEditingIndex] = useState(null);
 
     const handleTaskChange = (event) => {
         setSelectedTask(event.target.value);
@@ -25,22 +25,20 @@ function ToDoList() {
         event.preventDefault();
         if (selectedTask && taskDescription) {
             const newTask = {
-                id: Date.now(), // Unique ID for each task
+                id: Date.now(),
                 task: selectedTask,
                 priority: selectedPriority,
                 description: taskDescription
             };
             if (editingIndex !== null) {
-                // Update existing task if in editing mode
                 const updatedTasks = [...tasks];
+               
                 updatedTasks[editingIndex] = newTask;
                 setTasks(updatedTasks);
-                setEditingIndex(null); // Exit editing mode
+                setEditingIndex(null);
             } else {
-                // Add new task
                 setTasks([...tasks, newTask]);
             }
-            // Clear input fields
             setSelectedTask('');
             setSelectedPriority('Medium');
             setTaskDescription('');
@@ -51,7 +49,6 @@ function ToDoList() {
         const updatedTasks = [...tasks];
         updatedTasks.splice(index, 1);
         setTasks(updatedTasks);
-        // Exit editing mode if removing the currently edited task
         if (index === editingIndex) {
             setEditingIndex(null);
         }
@@ -94,13 +91,9 @@ function ToDoList() {
     };
 
     return (
-        
         <form className='all-content' onSubmit={handleAddTask}>
-            <div className='des label-input'>
-              
-              
-            <div className='addtask label-input'>
-                <label className='Task'     htmlFor='task'>Add Task:</label>
+            <div className='input-container'>
+                <label htmlFor='task' className='Task'>Add Task:</label>
                 <input
                     type='text'
                     id='task'
@@ -109,8 +102,10 @@ function ToDoList() {
                     onChange={handleTaskChange}
                     placeholder='Enter task...'
                 />
-            </div> 
-             <label className='des' htmlFor='description'>Description:</label>
+            </div>
+            
+            <div className='input-container'>
+                <label htmlFor='description' className='des'>Description:</label>
                 <textarea
                     id='description'
                     name='description'
@@ -119,8 +114,6 @@ function ToDoList() {
                     placeholder='Enter task description...'
                 />
             </div>
-
-            
 
             <div className='priority-select label-input'>
                 <label htmlFor='priority'>Priority:</label>
@@ -131,14 +124,16 @@ function ToDoList() {
                 </select>
             </div>
 
-            {editingIndex !== null ? (
-                <div>
-                    <button type='submit'>Update</button>
-                    <button type='button' onClick={handleCancelEdit}>Cancel</button>
-                </div>
-            ) : (
-                <button type='submit'>Add</button>
-            )}
+            <div className='button-group'>
+                {editingIndex !== null ? (
+                    <>
+                        <button type='submit'>Update</button>
+                        <button type='button' onClick={handleCancelEdit}>Cancel</button>
+                    </>
+                ) : (
+                    <button type='submit' className='addtask'>Add Task</button>
+                )}
+            </div>
 
             <div className='task-list'>
                 <h2>Task List:</h2>
@@ -175,4 +170,3 @@ function ToDoList() {
 }
 
 export default ToDoList;
- 

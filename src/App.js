@@ -2,13 +2,12 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './Login';
 import Register from './Register';
 import ToDoList from './ToDoList';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 function App() {
     return (
@@ -22,7 +21,6 @@ function App() {
                             <Nav.Link href="/register">Register</Nav.Link>
                             <Nav.Link href="/login">Login</Nav.Link>
                             <Nav.Link href="/todolist">To Do List</Nav.Link>
-                    
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
@@ -33,7 +31,6 @@ function App() {
                 <Route path='/register' element={<Register />} />
                 <Route path='/todolist' element={<ToDoList />} />
             </Routes>
-          
         </BrowserRouter>
     );
 }
