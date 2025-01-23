@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -9,6 +9,24 @@ import ToDoList from './ToDoList';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
 
 function App() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [email, setEmail] = useState("");
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            const user = JSON.parse(atob(token.split('.')[1]));
+            setEmail(user.email);
+            setIsLoggedIn(true);
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        setEmail("");
+        setIsLoggedIn(false);
+    };
+
     return (
         <BrowserRouter>
             <Navbar expand="lg" className="bg-body-tertiary">
@@ -17,10 +35,18 @@ function App() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link as={Link} to="/register">Register</Nav.Link>
-                            <Nav.Link as={Link} to="/login">Login</Nav.Link>
-                            <Nav.Link as={Link} to="/home">To Do List</Nav.Link>
+                            {!isLoggedIn && <Nav.Link as={Link} to="/register">Register</Nav.Link>}
+                            {!isLoggedIn && <Nav.Link as={Link} to="/login">Login</Nav.Link>}
+                            {isLoggedIn && <Nav.Link as={Link} to="/home">To Do List</Nav.Link>}
                         </Nav>
+                        {isLoggedIn && (
+                            <Nav>
+                                <Navbar.Text>
+                                    Hello, {email}
+                                </Navbar.Text>
+                                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+                            </Nav>
+                        )}
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

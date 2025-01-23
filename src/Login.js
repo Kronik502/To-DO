@@ -7,6 +7,7 @@ function Login() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
     
@@ -18,25 +19,20 @@ function Login() {
         }
     
         try {
-            // Fetch user data from your server
-            const response = await fetch('http://localhost:5000/users');
-            const users = await response.json();
-    
-            // Find user matching email and password
-            const user = users.find(
-                (user) => user.email === email && user.password === password
-            );
-    
-            if (user) {
+            const response = await fetch('http://localhost:5000/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.token); // Store the token
                 setSuccess("Login successful!");
                 setError("");
-                console.log("Logged in as:", user);
-    
-                // Save user email to localStorage
-                localStorage.setItem('email', user.email);
-    
-                // Redirect to home page
-                navigate('/home');
+                navigate('/home'); // Redirect to the home page
             } else {
                 setError("Invalid email or password.");
                 setSuccess("");
@@ -46,7 +42,7 @@ function Login() {
             setSuccess("");
         }
     };
-    
+
     return (
         <div className="container" style={{ marginTop: "10vh", maxWidth: "400px" }}>
             <form onSubmit={handleSubmit}>
